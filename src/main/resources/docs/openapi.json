@@ -1,0 +1,258 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Todo Management API",
+    "description": "API for managing todo items",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Main production server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Todo Management System",
+      "description": "API for managing todos"
+    }
+  ],
+  "paths": {
+    "/api/todos/{id}": {
+      "put": {
+        "tags": [
+          "Todo Management System"
+        ],
+        "summary": "Update a todo item",
+        "description": "Updates an existing todo in the database",
+        "operationId": "updateTodo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTodoDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated todo",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Todo"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Todo Management System"
+        ],
+        "summary": "Delete a todo item",
+        "description": "Deletes a todo from the database",
+        "operationId": "deleteTodo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted todo"
+          }
+        }
+      }
+    },
+    "/api/todos": {
+      "get": {
+        "tags": [
+          "Todo Management System"
+        ],
+        "summary": "Get user's todo items",
+        "description": "Retrieves all user's todos from the database",
+        "operationId": "getUserTodos",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved list of todos",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Todo"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Todo Management System"
+        ],
+        "summary": "Add a new todo item",
+        "description": "Stores a new todo in the database",
+        "operationId": "createTodo",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTodoDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created todo",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Todo"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GrantedAuthority": {
+        "type": "object",
+        "properties": {
+          "authority": {
+            "type": "string"
+          }
+        }
+      },
+      "Todo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "User": {
+        "required": [
+          "password",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "username": {
+            "maxLength": 50,
+            "minLength": 3,
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 2147483647,
+            "minLength": 6,
+            "type": "string"
+          },
+          "todo": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Todo"
+            }
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "accountNonExpired": {
+            "type": "boolean"
+          },
+          "credentialsNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonLocked": {
+            "type": "boolean"
+          },
+          "authorities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GrantedAuthority"
+            }
+          }
+        }
+      },
+      "UpdateTodoDTO": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string"
+          }
+        }
+      },
+      "CreateTodoDTO": {
+        "required": [
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  }
+}

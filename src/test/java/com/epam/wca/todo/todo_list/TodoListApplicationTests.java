@@ -1,4 +1,4 @@
-package com.epam.wca.todo.Todo_List;
+package com.epam.wca.todo.todo_list;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
