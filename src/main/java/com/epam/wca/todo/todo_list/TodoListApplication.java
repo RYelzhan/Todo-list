@@ -1,4 +1,4 @@
-package com.epam.wca.todo.Todo_List;
+package com.epam.wca.todo.todo_list;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
